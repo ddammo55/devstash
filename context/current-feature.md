@@ -20,4 +20,4 @@ Not Started
 
 <!-- Keep this updated. Earliest to latest -->
 
-- Project setup and boilerplate cleanup
+- Next.js 초기 설정 완료 (Tailwind CSS, shadcn/ui 통합)
