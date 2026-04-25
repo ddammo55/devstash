@@ -1,6 +1,6 @@
 // Mock data for development - Single source of truth before database implementation
 
-import { ContentType } from '@prisma/client';
+export type ContentType = 'TEXT' | 'FILE' | 'URL';
 
 // Types matching Prisma schema
 export interface MockUser {
