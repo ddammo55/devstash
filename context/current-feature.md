@@ -4,7 +4,7 @@
 
 ## Status
 
-In Progress
+Completed
 
 ## Overview
 
@@ -14,13 +14,13 @@ This is phase 1 of 3 for the dashboard UI layout. Use the screenshot referenced 
 
 ### Phase 1 Requirements
 
-- [ ] ShadCN UI initialization and components
-- [ ] ShadCN component installation
-- [ ] Dashboard route at /dashboard
-- [ ] Main dashboard layout and any global styles
-- [ ] Dark mode by default
-- [ ] Top bar with search and new item button (display only)
-- [ ] Placeholder for sidebar and main area. Just add an h2 with "Sidebar" and "Main" for now.
+- [x] ShadCN UI initialization and components
+- [x] ShadCN component installation
+- [x] Dashboard route at /dashboard
+- [x] Main dashboard layout and any global styles
+- [x] Dark mode by default
+- [x] Top bar with search and new item button (display only)
+- [x] Placeholder for sidebar and main area. Just add an h2 with "Sidebar" and "Main" for now.
 
 ## References
 
@@ -43,3 +43,4 @@ This is phase 1 of 3 for the dashboard UI layout. Use the screenshot referenced 
 
 - Next.js 초기 설정 완료 (Tailwind CSS, shadcn/ui 통합)
 - Dashboard Phase 1 작업 시작
+- Dashboard Phase 1 완료 (TopBar, 다크모드, 플레이스홀더 레이아웃)
