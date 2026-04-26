@@ -4,7 +4,7 @@
 
 ## Status
 
-Not Started
+In Progress
 
 ## Overview
 
@@ -43,3 +43,4 @@ This is phase 3 of 3 for the dashboard UI layout. Use the screenshot referenced 
 - Next.js 초기 설정 완료 (Tailwind CSS, shadcn/ui 통합)
 - Dashboard Phase 1 완료 (TopBar, 다크모드, 플레이스홀더 레이아웃)
 - Dashboard Phase 2 완료 (사이드바, 컬렉션, 아이템 타입, 사용자 영역)
+- Dashboard Phase 3 작업 시작
