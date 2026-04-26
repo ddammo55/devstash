@@ -1,10 +1,49 @@
-import { Plus } from 'lucide-react';
+'use client';
+
+import { Menu, PanelLeftClose, PanelLeftOpen, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-export default function TopBar() {
+interface TopBarProps {
+  isSidebarOpen: boolean;
+  onToggleSidebar: () => void;
+  onToggleMobileSidebar: () => void;
+}
+
+export default function TopBar({
+  isSidebarOpen,
+  onToggleSidebar,
+  onToggleMobileSidebar,
+}: TopBarProps) {
   return (
     <div className="h-14 border-b border-border bg-background px-4 flex items-center justify-between gap-4">
+      {/* Sidebar Toggle Buttons */}
+      <div className="flex items-center gap-2">
+        {/* Mobile Menu Button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onToggleMobileSidebar}
+          className="lg:hidden"
+        >
+          <Menu className="w-5 h-5" />
+        </Button>
+
+        {/* Desktop Sidebar Toggle */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onToggleSidebar}
+          className="hidden lg:flex"
+        >
+          {isSidebarOpen ? (
+            <PanelLeftClose className="w-5 h-5" />
+          ) : (
+            <PanelLeftOpen className="w-5 h-5" />
+          )}
+        </Button>
+      </div>
+
       {/* Logo */}
       <div className="text-lg font-semibold text-foreground min-w-fit">
         DevStash
