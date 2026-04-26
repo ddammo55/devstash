@@ -47,12 +47,12 @@ export default function Sidebar({
         className={cn(
           // Mobile drawer
           'fixed inset-y-0 left-0 z-50 w-[220px]',
-          'transition-transform duration-200 ease-in-out',
           isMobileOpen ? 'translate-x-0' : '-translate-x-full',
           // Desktop layout
           'lg:relative lg:translate-x-0 lg:inset-auto lg:z-auto',
           isOpen ? 'lg:w-[220px]' : 'lg:w-[52px]',
-          'transition-[width] duration-200 ease-in-out',
+          // Transitions - use transition-all to handle both width and transform
+          'transition-all duration-200 ease-in-out',
           // Common
           'flex flex-col h-screen border-r border-border bg-background overflow-y-auto'
         )}
