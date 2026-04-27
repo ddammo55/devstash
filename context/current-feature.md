@@ -49,3 +49,4 @@ Set up Prisma ORM with Neon PostgreSQL (serverless database). Create initial sch
 - Dashboard Phase 2 완료 (사이드바, 컬렉션, 아이템 타입, 사용자 영역)
 - Dashboard Phase 3 완료 (메인 콘텐츠: 통계 카드, 컬렉션, 고정/최근 항목)
 - Prisma 7 + Neon PostgreSQL 초기 설정 완료 (스키마, 마이그레이션, 시스템 타입 seed)
+- 데이터베이스 유틸리티 추가 완료 (test-db.ts 스크립트, npm 스크립트 추가: db:studio, db:seed, db:migrate)
