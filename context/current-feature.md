@@ -1,6 +1,6 @@
 # Current Feature
 
-## Seed Sample Data for Development
+## Dashboard Collections - Connect to Database
 
 ## Status
 
@@ -8,41 +8,44 @@ Completed
 
 ## Overview
 
-Create a comprehensive seed script (`prisma/seed.ts`) to populate the database with sample data for development and demos. Includes demo user, system item types, and sample collections with various items (snippets, prompts, commands, links) across multiple categories (React Patterns, AI Workflows, DevOps, Terminal Commands, Design Resources).
+Replace mock collection data in the dashboard's main area with real data from Neon PostgreSQL database using Prisma. Collections should display with cards showing recent collections, derived border colors based on content types, and small type icons. Maintain current design while fetching data directly in server components.
 
 ## Goals
 
-### Seed Data Requirements
+### Dashboard Collections Implementation
 
-- [x] Create demo user (demo@devstash.io) with hashed password
-- [x] Seed 7 system item types (snippet, prompt, command, note, file, image, link)
-- [x] Create 5 collections with descriptions
-- [x] Add sample items to each collection:
-  - [x] React Patterns: 3 snippets (TypeScript)
-  - [x] AI Workflows: 3 prompts
-  - [x] DevOps: 1 snippet + 1 command + 2 links
-  - [x] Terminal Commands: 4 commands
-  - [x] Design Resources: 4 links
-- [x] Test seed script with `npx prisma db seed`
-- [x] Verify data is correctly inserted in database
-- [x] Build and test application with sample data
+- [x] Create src/lib/db/collections.ts with data fetching functions
+- [x] Implement getCollections() function to fetch from database
+- [x] Calculate most-used content type per collection (for border color)
+- [x] Fetch collection items and derive type icons
+- [x] Update dashboard main component to use server-side data fetching
+- [x] Replace mock-data.ts collections with real database queries
+- [x] Ensure collection cards display correct border colors (type-based)
+- [x] Show type icons for each content type in collection
+- [x] Update collection stats (item count, etc.)
+- [x] Test with demo user's collections
+- [x] Build and verify no TypeScript errors
 
 ## References
 
-- @context/features/seed-spec.md
+- @context/features/dashboard-collections-spec.md
+- @context/screenshots/dashboard-ui-main.png
+- @src/lib/mock-data.ts (current implementation to replace)
 - @context/project-overview.md
 - @context/coding-standards.md
-- Prisma seeding: https://www.prisma.io/docs/guides/database/seed-database
+- Next.js Server Components: https://nextjs.org/docs/app/building-your-application/rendering/server-components
+- Prisma relations: https://www.prisma.io/docs/concepts/relations
 
 ## Notes
 
-- Password hashing: Use bcryptjs with 12 rounds for demo user
-- Demo user: demo@devstash.io / 12345678 (plaintext in spec, hashed in DB)
-- Sample data should be idempotent (safe to run multiple times)
-- Use findUnique + create pattern to avoid duplicates
-- All sample items belong to demo user
-- Real URLs for links in Design Resources collection
-- System item types are shared across all users (userId: null)
+- Use server components for data fetching (no useState/useEffect)
+- Fetch only collections for demo user (userId from session later)
+- Collection border color: derive from most frequent item type
+- Type icons: use Lucide React icons matching ItemType names
+- Do NOT modify mock-data.ts yet - keep it as fallback
+- Collection stats: calculate from related items count
+- Handle empty collections gracefully
+- Cache strategy: revalidatePath after mutations (NextAuth integration later)
 
 ## History
 
@@ -55,3 +58,4 @@ Create a comprehensive seed script (`prisma/seed.ts`) to populate the database w
 - Prisma 7 + Neon PostgreSQL 초기 설정 완료 (스키마, 마이그레이션, 시스템 타입 seed)
 - 데이터베이스 유틸리티 추가 완료 (test-db.ts 스크립트, npm 스크립트 추가: db:studio, db:seed, db:migrate)
 - 샘플 데이터 시드 완료 (Demo user + 5 collections + 18 sample items across 4 item types)
+- Dashboard Collections DB 연동 완료 (Mock data → Prisma queries, 서버 컴포넌트, 타입별 border color 계산)

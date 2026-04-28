@@ -6,33 +6,48 @@ import {
   Pin,
   Clock,
 } from 'lucide-react';
-import {
-  getMockCollections,
-  getMockPinnedItems,
-  getMockRecentItems,
-  getMockFavoriteCollections,
-  mockStatistics,
-  mockItems,
-  mockItemTypes,
-} from '@/lib/mock-data';
+import { prisma } from '@/lib/prisma';
+import { getCollections, getCollectionStats } from '@/lib/db/collections';
 import StatsCard from '@/components/dashboard/StatsCard';
 import CollectionCard from '@/components/dashboard/CollectionCard';
 import ItemCard from '@/components/dashboard/ItemCard';
 
-export default function DashboardPage() {
-  // Data derivations
-  const totalItems = mockStatistics.totalItems;
-  const totalCollections = getMockCollections().length;
-  const favoriteItems = mockItems.filter((i) => i.isFavorite).length;
-  const favoriteColls = getMockFavoriteCollections().length;
+export default async function DashboardPage() {
+  // TODO: Get userId from NextAuth session
+  // For now, use demo user
+  const demoUser = await prisma.user.findUnique({
+    where: { email: 'demo@devstash.io' },
+  });
 
-  const collections = getMockCollections();
-  const pinnedItems = getMockPinnedItems();
-  const recentItems = getMockRecentItems(10);
+  if (!demoUser) {
+    return <div>User not found</div>;
+  }
 
-  // Helper to look up item type
-  const getItemType = (itemTypeId: string) =>
-    mockItemTypes.find((t) => t.id === itemTypeId);
+  const userId = demoUser.id;
+
+  // Fetch data from database
+  const [collections, totalItems, favoriteItems, collectionStats] =
+    await Promise.all([
+      getCollections(userId),
+      prisma.item.count({ where: { userId } }),
+      prisma.item.count({
+        where: { userId, isFavorite: true },
+      }),
+      getCollectionStats(userId),
+    ]);
+
+  const pinnedItems = await prisma.item.findMany({
+    where: { userId, isPinned: true },
+    include: { itemType: true },
+    take: 10,
+  });
+
+  const recentItems = await prisma.item.findMany({
+    where: { userId },
+    include: { itemType: true },
+    orderBy: { updatedAt: 'desc' },
+    take: 10,
+  });
 
   return (
     <div className="p-6 space-y-8 max-w-none">
@@ -56,7 +71,7 @@ export default function DashboardPage() {
           <StatsCard
             icon={LayoutGrid}
             label="Total Collections"
-            value={totalCollections}
+            value={collectionStats.totalCollections}
             iconColor="#8b5cf6"
           />
           <StatsCard
@@ -68,7 +83,7 @@ export default function DashboardPage() {
           <StatsCard
             icon={BookOpen}
             label="Favorite Collections"
-            value={favoriteColls}
+            value={collectionStats.favoriteCollections}
             iconColor="#10b981"
           />
         </div>
@@ -81,18 +96,16 @@ export default function DashboardPage() {
         </h2>
         <div className="flex gap-4 overflow-x-auto pb-2">
           {collections.map((col) => {
-            const defaultType = mockItemTypes.find(
-              (t) => t.id === col.defaultTypeId
-            );
+            const typeToDisplay = col.mostUsedType || col.defaultType;
             return (
               <CollectionCard
                 key={col.id}
                 name={col.name}
-                description={col.description}
+                description={col.description ?? undefined}
                 itemCount={col.itemCount}
                 isFavorite={col.isFavorite}
-                defaultTypeIcon={defaultType?.icon}
-                defaultTypeColor={defaultType?.color}
+                defaultTypeIcon={typeToDisplay?.icon}
+                defaultTypeColor={typeToDisplay?.color}
               />
             );
           })}
@@ -106,22 +119,19 @@ export default function DashboardPage() {
           <h2 className="text-base font-semibold text-foreground">Pinned</h2>
         </div>
         <div className="flex gap-4 overflow-x-auto pb-2">
-          {pinnedItems.map((item) => {
-            const type = getItemType(item.itemTypeId);
-            return (
-              <ItemCard
-                key={item.id}
-                variant="card"
-                title={item.title}
-                description={item.description}
-                tags={item.tags}
-                updatedAt={item.updatedAt}
-                typeName={type?.name ?? ''}
-                typeIcon={type?.icon ?? 'Code'}
-                typeColor={type?.color ?? '#6b7280'}
-              />
-            );
-          })}
+          {pinnedItems.map((item) => (
+            <ItemCard
+              key={item.id}
+              variant="card"
+              title={item.title}
+              description={item.description ?? undefined}
+              tags={[]}
+              updatedAt={item.updatedAt}
+              typeName={item.itemType.name}
+              typeIcon={item.itemType.icon}
+              typeColor={item.itemType.color}
+            />
+          ))}
         </div>
       </section>
 
@@ -134,22 +144,19 @@ export default function DashboardPage() {
           </h2>
         </div>
         <div className="bg-card border border-border rounded-lg px-4">
-          {recentItems.map((item) => {
-            const type = getItemType(item.itemTypeId);
-            return (
-              <ItemCard
-                key={item.id}
-                variant="row"
-                title={item.title}
-                description={item.description}
-                tags={item.tags}
-                updatedAt={item.updatedAt}
-                typeName={type?.name ?? ''}
-                typeIcon={type?.icon ?? 'Code'}
-                typeColor={type?.color ?? '#6b7280'}
-              />
-            );
-          })}
+          {recentItems.map((item) => (
+            <ItemCard
+              key={item.id}
+              variant="row"
+              title={item.title}
+              description={item.description ?? undefined}
+              tags={[]}
+              updatedAt={item.updatedAt}
+              typeName={item.itemType.name}
+              typeIcon={item.itemType.icon}
+              typeColor={item.itemType.color}
+            />
+          ))}
         </div>
       </section>
     </div>
