@@ -2,42 +2,35 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, ChevronRight, Folder } from 'lucide-react';
+import { ChevronDown, ChevronRight, Folder, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import {
-  getMockUser,
-  getMockCollections,
-  getMockFavoriteCollections,
-  mockItemTypes,
-  mockStatistics,
-} from '@/lib/mock-data';
-import { ITEM_TYPE_ICON_MAP, ITEM_TYPE_STAT_KEY } from '@/lib/item-type-icons';
+import { ITEM_TYPE_ICON_MAP } from '@/lib/item-type-icons';
 import UserAvatar from './UserAvatar';
+import { ItemTypeWithCount } from '@/lib/db/items';
+import { CollectionWithStats } from '@/lib/db/collections';
 
 interface SidebarProps {
-  isOpen: boolean;
-  isMobileOpen: boolean;
-  onCloseMobile: () => void;
+  itemTypes: ItemTypeWithCount[];
+  favoriteCollections: CollectionWithStats[];
+  otherCollections: CollectionWithStats[];
 }
 
 export default function Sidebar({
-  isOpen,
-  isMobileOpen,
-  onCloseMobile,
+  itemTypes,
+  favoriteCollections,
+  otherCollections,
 }: SidebarProps) {
   const [typesOpen, setTypesOpen] = useState(true);
-  const user = getMockUser();
-  const allCollections = getMockCollections();
-  const favoriteCollections = getMockFavoriteCollections();
-  const otherCollections = allCollections.filter((c) => !c.isFavorite);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   return (
     <>
       {/* Mobile Backdrop */}
-      {isMobileOpen && (
+      {isMobileSidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/50 lg:hidden"
-          onClick={onCloseMobile}
+          onClick={() => setIsMobileSidebarOpen(false)}
           aria-hidden="true"
         />
       )}
@@ -47,10 +40,10 @@ export default function Sidebar({
         className={cn(
           // Mobile drawer
           'fixed inset-y-0 left-0 z-50 w-[220px]',
-          isMobileOpen ? 'translate-x-0' : '-translate-x-full',
+          isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full',
           // Desktop layout
           'lg:relative lg:translate-x-0 lg:inset-auto lg:z-auto',
-          isOpen ? 'lg:w-[220px]' : 'lg:w-[52px]',
+          isSidebarOpen ? 'lg:w-[220px]' : 'lg:w-[52px]',
           // Transitions - use transition-all to handle both width and transform
           'transition-all duration-200 ease-in-out',
           // Common
@@ -69,7 +62,7 @@ export default function Sidebar({
               'transition-colors'
             )}
           >
-            <span className={cn(!isOpen && 'hidden')}>Types</span>
+            <span className={cn(!isSidebarOpen && 'hidden')}>Types</span>
             {typesOpen ? (
               <ChevronDown className="w-3 h-3" />
             ) : (
@@ -80,10 +73,8 @@ export default function Sidebar({
           {/* Types List */}
           {typesOpen && (
             <div className="space-y-1">
-              {mockItemTypes.map((type) => {
+              {itemTypes.map((type) => {
                 const Icon = ITEM_TYPE_ICON_MAP[type.icon] || ITEM_TYPE_ICON_MAP.Code;
-                const statKey = ITEM_TYPE_STAT_KEY[type.name];
-                const count = (mockStatistics as any)[statKey] || 0;
 
                 return (
                   <Link
@@ -106,12 +97,12 @@ export default function Sidebar({
                     {/* Icon */}
                     <Icon className="w-4 h-4 flex-shrink-0" />
                     {/* Name & Count */}
-                    <span className={cn('flex-1 truncate', !isOpen && 'hidden')}>
+                    <span className={cn('flex-1 truncate', !isSidebarOpen && 'hidden')}>
                       {type.name.charAt(0).toUpperCase() + type.name.slice(1)}
                     </span>
-                    {isOpen && (
+                    {isSidebarOpen && (
                       <span className="text-xs text-muted-foreground flex-shrink-0">
-                        {count}
+                        {type.count}
                       </span>
                     )}
                   </Link>
@@ -129,7 +120,7 @@ export default function Sidebar({
               <h3
                 className={cn(
                   'text-xs font-semibold text-muted-foreground px-2',
-                  !isOpen && 'hidden'
+                  !isSidebarOpen && 'hidden'
                 )}
               >
                 Favorites
@@ -147,8 +138,8 @@ export default function Sidebar({
                       'truncate'
                     )}
                   >
-                    <Folder className="w-4 h-4 flex-shrink-0" />
-                    <span className={cn('flex-1 truncate', !isOpen && 'hidden')}>
+                    <Star className="w-4 h-4 flex-shrink-0 fill-yellow-400 text-yellow-400" />
+                    <span className={cn('flex-1 truncate', !isSidebarOpen && 'hidden')}>
                       {col.name}
                     </span>
                   </Link>
@@ -163,37 +154,61 @@ export default function Sidebar({
               <h3
                 className={cn(
                   'text-xs font-semibold text-muted-foreground px-2',
-                  !isOpen && 'hidden'
+                  !isSidebarOpen && 'hidden'
                 )}
               >
                 All Collections
               </h3>
               <div className="space-y-1">
-                {otherCollections.map((col) => (
-                  <Link
-                    key={col.id}
-                    href={`/collections/${col.id}`}
-                    className={cn(
-                      'flex items-center gap-2 px-2 py-1.5',
-                      'rounded-md text-sm',
-                      'text-foreground hover:bg-accent hover:text-accent-foreground',
-                      'transition-colors',
-                      'truncate'
-                    )}
-                  >
-                    <Folder className="w-4 h-4 flex-shrink-0" />
-                    <span className={cn('flex-1 truncate', !isOpen && 'hidden')}>
-                      {col.name}
-                    </span>
-                  </Link>
-                ))}
+                {otherCollections.map((col) => {
+                  const typeColor = col.mostUsedType?.color || col.defaultType?.color || '#9ca3af';
+
+                  return (
+                    <Link
+                      key={col.id}
+                      href={`/collections/${col.id}`}
+                      className={cn(
+                        'flex items-center gap-2 px-2 py-1.5',
+                        'rounded-md text-sm',
+                        'text-foreground hover:bg-accent hover:text-accent-foreground',
+                        'transition-colors',
+                        'truncate'
+                      )}
+                    >
+                      <span
+                        className="w-3 h-3 rounded-full flex-shrink-0"
+                        style={{ backgroundColor: typeColor }}
+                        aria-hidden="true"
+                      />
+                      <span className={cn('flex-1 truncate', !isSidebarOpen && 'hidden')}>
+                        {col.name}
+                      </span>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           )}
-        </div>
 
-        {/* User Avatar */}
-        <UserAvatar user={user} collapsed={!isOpen} />
+          {/* View All Collections Link */}
+          <div className="space-y-1 pt-2 border-t border-border">
+            <Link
+              href="/collections"
+              className={cn(
+                'flex items-center gap-2 px-2 py-1.5',
+                'rounded-md text-sm',
+                'text-muted-foreground hover:text-foreground hover:bg-accent',
+                'transition-colors',
+                'truncate'
+              )}
+            >
+              <Folder className="w-4 h-4 flex-shrink-0" />
+              <span className={cn('flex-1 truncate', !isSidebarOpen && 'hidden')}>
+                View all collections
+              </span>
+            </Link>
+          </div>
+        </div>
       </aside>
     </>
   );

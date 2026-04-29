@@ -401,7 +401,7 @@ async function handleAPIRequest(fn: () => Promise<any>) {
   try {
     return await fn();
   } catch (error) {
-    if (error instanceof APIError) {
+    if (error instanceof APIEfrror) {
       return { error: error.message, statusCode: error.statusCode };
     }
     return { error: 'Unknown error', statusCode: 500 };

@@ -1,32 +1,44 @@
-'use client';
-
-import { useState } from 'react';
+import { prisma } from '@/lib/prisma';
+import { getCollections } from '@/lib/db/collections';
+import { getSystemItemTypes } from '@/lib/db/items';
 import TopBar from '@/components/layout/TopBar';
+import DashboardLayoutClient from '@/components/layout/DashboardLayoutClient';
 import Sidebar from '@/components/layout/Sidebar';
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  // Get demo user
+  const demoUser = await prisma.user.findUnique({
+    where: { email: 'demo@devstash.io' },
+  });
+
+  if (!demoUser) {
+    return <div>User not found</div>;
+  }
+
+  // Fetch sidebar data
+  const [itemTypes, collections] = await Promise.all([
+    getSystemItemTypes(),
+    getCollections(demoUser.id),
+  ]);
+
+  const favoriteCollections = collections.filter((c) => c.isFavorite);
+  const otherCollections = collections.filter((c) => !c.isFavorite);
 
   return (
-    <div className="flex h-screen flex-col bg-background overflow-hidden">
-      <TopBar
-        isSidebarOpen={isSidebarOpen}
-        onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
-        onToggleMobileSidebar={() => setIsMobileSidebarOpen((prev) => !prev)}
-      />
+    <DashboardLayoutClient>
+      <TopBar />
       <div className="flex flex-1 overflow-hidden relative">
         <Sidebar
-          isOpen={isSidebarOpen}
-          isMobileOpen={isMobileSidebarOpen}
-          onCloseMobile={() => setIsMobileSidebarOpen(false)}
+          itemTypes={itemTypes}
+          favoriteCollections={favoriteCollections}
+          otherCollections={otherCollections}
         />
         <main className="flex-1 overflow-auto">{children}</main>
       </div>
-    </div>
+    </DashboardLayoutClient>
   );
 }
