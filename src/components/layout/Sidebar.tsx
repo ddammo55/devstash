@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ChevronDown, ChevronRight, Folder, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 import { ITEM_TYPE_ICON_MAP } from '@/lib/item-type-icons';
 import UserAvatar from './UserAvatar';
 import { ItemTypeWithCount } from '@/lib/db/items';
@@ -100,7 +101,13 @@ export default function Sidebar({
                     <span className={cn('flex-1 truncate', !isSidebarOpen && 'hidden')}>
                       {type.name.charAt(0).toUpperCase() + type.name.slice(1)}
                     </span>
-                    {isSidebarOpen && (
+                    {/* Pro Badge */}
+                    {(type.name === 'file' || type.name === 'image') && (
+                      <Badge variant="secondary" className="ml-1 flex-shrink-0">
+                        Pro
+                      </Badge>
+                    )}
+                    {isSidebarOpen && !['file', 'image'].includes(type.name) && (
                       <span className="text-xs text-muted-foreground flex-shrink-0">
                         {type.count}
                       </span>
