@@ -1,70 +1,26 @@
 # Current Feature
 
-## Dashboard Stats & Sidebar - Connect to Database
+(다음 기능을 문서화하면 /feature load [spec] 으로 시작하세요)
 
 ## Status
 
-Completed
+(TBD)
 
 ## Overview
 
-Replace mock data with real database data for dashboard stats and sidebar. Display system item types in sidebar with icons (linking to /items/[typename]). Show actual collection data with favorite indicators and type-based colored circles for recent collections. Update stats to reflect real data from Neon PostgreSQL database using Prisma. Maintain current design while fetching data directly in server components.
+(추가될 예정)
 
 ## Goals
 
-### Stats & Sidebar Database Integration
-
-**Stats Section**:
-- [x] Create src/lib/db/items.ts with data fetching functions
-- [x] Implement function to get total items count (userId)
-- [x] Implement function to get total collections count (userId)
-- [x] Implement function to get total snippets count (userId)
-- [x] Replace mock stats with real database counts
-- [x] Update stats display to reflect real data
-
-**Sidebar Item Types**:
-- [x] Fetch system item types from database
-- [x] Display all 7 system types with icons in sidebar
-- [x] Create links to /items/[typename] pages
-- [x] Highlight selected item type if on that page
-
-**Sidebar Collections**:
-- [x] Fetch favorite collections for user
-- [x] Fetch recent collections for user
-- [x] Show star icon for favorite collections
-- [x] Calculate most-used item type per collection
-- [x] Display colored circle based on item type color
-- [x] Add "View all collections" link → /collections
-
-**Testing & Validation**:
-- [x] Test with demo user's data
-- [x] Verify stats match database counts
-- [x] Build and verify no TypeScript errors
+(추가될 예정)
 
 ## References
 
-- @context/features/stats-sidebar-spec.md
-- @context/features/dashboard-phase-3-specmd
-- @context/screenshots/dashboard-ui-main.png
-- @src/lib/mock-data.ts (current implementation to replace)
-- @src/lib/db/collections.ts (reference for database query patterns)
-- @context/project-overview.md
-- @context/coding-standards.md
-- Next.js Server Components: https://nextjs.org/docs/app/building-your-application/rendering/server-components
-- Prisma queries: https://www.prisma.io/docs/concepts/components/prisma-client
+(추가될 예정)
 
 ## Notes
 
-- Use server components for data fetching (already using in dashboard/page.tsx)
-- Fetch only data for demo user (userId from session later)
-- Use collections.ts query pattern as reference for items.ts functions
-- Item type colors: defined in seed data (e.g., snippet: #3b82f6, prompt: #8b5cf6)
-- System types have userId: null; user types have userId set
-- For recent collections: calculate most-used item type by counting items in that type
-- Cache strategy: revalidatePath after mutations (NextAuth integration later)
-- Stats should update reactively when data changes
-- Favorites section: show system types that user has favorited (if added to schema)
-- All collections link goes to /collections route (TBD)
+(추가될 예정)
 
 ## History
 
@@ -79,3 +35,4 @@ Replace mock data with real database data for dashboard stats and sidebar. Displ
 - 샘플 데이터 시드 완료 (Demo user + 5 collections + 18 sample items across 4 item types)
 - Dashboard Stats & Sidebar DB 연동 완료 (실제 DB 데이터로 item types, collections, stats 표시)
 - Dashboard Collections DB 연동 완료 (Mock data → Prisma queries, 서버 컴포넌트, 타입별 border color 계산)
+- Pro Badge To Sidebar 완료 (Badge 컴포넌트 추가, Files/Images에 Pro 배지 표시)
