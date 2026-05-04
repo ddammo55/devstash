@@ -69,11 +69,6 @@ export async function getItemStats(userId: string): Promise<ItemStats> {
   };
 }
 
-export async function getItemTypeStats(userId: string): Promise<ItemTypeWithCount[]> {
-  const itemStats = await getItemStats(userId);
-  return itemStats.itemsByType;
-}
-
 export async function getTotalItemsCount(userId: string): Promise<number> {
   return prisma.item.count({
     where: { userId },

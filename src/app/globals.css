@@ -38,7 +38,12 @@
     background-color: #0a0a0a;
     color: #fafafa;
   }
-  * {
+  button,
+  a,
+  input,
+  select,
+  textarea,
+  [role="button"] {
     transition-property: background-color, border-color, color;
     transition-duration: 150ms;
   }

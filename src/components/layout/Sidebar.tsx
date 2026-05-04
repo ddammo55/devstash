@@ -6,7 +6,6 @@ import { ChevronDown, ChevronRight, Folder, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { ITEM_TYPE_ICON_MAP } from '@/lib/item-type-icons';
-import UserAvatar from './UserAvatar';
 import { ItemTypeWithCount } from '@/lib/db/items';
 import { CollectionWithStats } from '@/lib/db/collections';
 
@@ -22,7 +21,6 @@ export default function Sidebar({
   otherCollections,
 }: SidebarProps) {
   const [typesOpen, setTypesOpen] = useState(true);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   return (
@@ -43,8 +41,7 @@ export default function Sidebar({
           'fixed inset-y-0 left-0 z-50 w-[220px]',
           isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full',
           // Desktop layout
-          'lg:relative lg:translate-x-0 lg:inset-auto lg:z-auto',
-          isSidebarOpen ? 'lg:w-[220px]' : 'lg:w-[52px]',
+          'lg:relative lg:translate-x-0 lg:inset-auto lg:z-auto lg:w-[220px]',
           // Transitions - use transition-all to handle both width and transform
           'transition-all duration-200 ease-in-out',
           // Common
@@ -63,7 +60,7 @@ export default function Sidebar({
               'transition-colors'
             )}
           >
-            <span className={cn(!isSidebarOpen && 'hidden')}>Types</span>
+            <span>Types</span>
             {typesOpen ? (
               <ChevronDown className="w-3 h-3" />
             ) : (
@@ -98,7 +95,7 @@ export default function Sidebar({
                     {/* Icon */}
                     <Icon className="w-4 h-4 flex-shrink-0" />
                     {/* Name & Count */}
-                    <span className={cn('flex-1 truncate', !isSidebarOpen && 'hidden')}>
+                    <span className="flex-1 truncate">
                       {type.name.charAt(0).toUpperCase() + type.name.slice(1)}
                     </span>
                     {/* Pro Badge */}
@@ -107,7 +104,7 @@ export default function Sidebar({
                         Pro
                       </Badge>
                     )}
-                    {isSidebarOpen && !['file', 'image'].includes(type.name) && (
+                    {!['file', 'image'].includes(type.name) && (
                       <span className="text-xs text-muted-foreground flex-shrink-0">
                         {type.count}
                       </span>
@@ -124,12 +121,7 @@ export default function Sidebar({
           {/* Favorites Subsection */}
           {favoriteCollections.length > 0 && (
             <div className="space-y-1">
-              <h3
-                className={cn(
-                  'text-xs font-semibold text-muted-foreground px-2',
-                  !isSidebarOpen && 'hidden'
-                )}
-              >
+              <h3 className="text-xs font-semibold text-muted-foreground px-2">
                 Favorites
               </h3>
               <div className="space-y-1">
@@ -146,9 +138,7 @@ export default function Sidebar({
                     )}
                   >
                     <Star className="w-4 h-4 flex-shrink-0 fill-yellow-400 text-yellow-400" />
-                    <span className={cn('flex-1 truncate', !isSidebarOpen && 'hidden')}>
-                      {col.name}
-                    </span>
+                    <span className="flex-1 truncate">{col.name}</span>
                   </Link>
                 ))}
               </div>
@@ -161,8 +151,7 @@ export default function Sidebar({
               <h3
                 className={cn(
                   'text-xs font-semibold text-muted-foreground px-2',
-                  !isSidebarOpen && 'hidden'
-                )}
+                                  )}
               >
                 All Collections
               </h3>
@@ -187,9 +176,7 @@ export default function Sidebar({
                         style={{ backgroundColor: typeColor }}
                         aria-hidden="true"
                       />
-                      <span className={cn('flex-1 truncate', !isSidebarOpen && 'hidden')}>
-                        {col.name}
-                      </span>
+                      <span className="flex-1 truncate">{col.name}</span>
                     </Link>
                   );
                 })}
@@ -210,9 +197,7 @@ export default function Sidebar({
               )}
             >
               <Folder className="w-4 h-4 flex-shrink-0" />
-              <span className={cn('flex-1 truncate', !isSidebarOpen && 'hidden')}>
-                View all collections
-              </span>
+              <span className="flex-1 truncate">View all collections</span>
             </Link>
           </div>
         </div>

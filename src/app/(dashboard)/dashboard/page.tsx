@@ -127,8 +127,6 @@ export default async function DashboardPage() {
               description={item.description ?? undefined}
               tags={[]}
               updatedAt={item.updatedAt}
-              typeName={item.itemType.name}
-              typeIcon={item.itemType.icon}
               typeColor={item.itemType.color}
             />
           ))}
@@ -152,8 +150,6 @@ export default async function DashboardPage() {
               description={item.description ?? undefined}
               tags={[]}
               updatedAt={item.updatedAt}
-              typeName={item.itemType.name}
-              typeIcon={item.itemType.icon}
               typeColor={item.itemType.color}
             />
           ))}

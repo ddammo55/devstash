@@ -48,19 +48,15 @@ async function seed() {
     ];
 
     for (const type of systemItemTypes) {
-      const existing = await prisma.itemType.findFirst({
-        where: { name: type.name, userId: null },
+      await prisma.itemType.upsert({
+        where: { name_userId: { name: type.name, userId: null as any } },
+        update: {},
+        create: {
+          ...type,
+          isSystem: true,
+          userId: null,
+        },
       });
-
-      if (!existing) {
-        await prisma.itemType.create({
-          data: {
-            ...type,
-            isSystem: true,
-            userId: null,
-          },
-        });
-      }
     }
     console.log(`   ✅ ${systemItemTypes.length} system item types created\n`);
 

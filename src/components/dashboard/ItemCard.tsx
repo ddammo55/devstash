@@ -5,8 +5,6 @@ interface ItemCardProps {
   description?: string;
   tags?: string[];
   updatedAt: Date;
-  typeName: string;
-  typeIcon: string;
   typeColor: string;
   variant: 'card' | 'row';
 }

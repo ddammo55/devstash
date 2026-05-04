@@ -1,0 +1,1 @@
+- [DevStash Codebase Context](project_devstash_context.md) — audit findings May 2026: auth deferral, N+1 queries, dead state, mock-data PII, missing DB URL
