@@ -22,6 +22,16 @@ Read these for full project context:
 - OpenAI gpt-5-nano
 - Stripe (payments)
 
+## Neon Database Configuration
+
+**Always use these defaults for Neon MCP operations unless explicitly instructed otherwise:**
+
+- **Project ID**: `delicate-credit-74460092` (devstash)
+- **Default Branch**: `br-rapid-block-anb8ywt4` (development)
+- **Database**: `neondb`
+
+⚠️ **CRITICAL**: Never touch the `production` branch (br-damp-snow-anz8ap6f) unless explicitly authorized. All database migrations, schema changes, and testing must be performed on the `development` branch only.
+
 ## Quick Commands
 
 ```bash
