@@ -1,55 +1,24 @@
-# Current Feature: Auth Setup - NextAuth + GitHub Provider
+# Current Feature
 
 ## Status
 
-In Progress
+(TBD)
 
 ## Overview
 
-Set up NextAuth v5 with Prisma adapter and GitHub OAuth. Use NextAuth's default pages for testing.
+(추가될 예정)
 
 ## Goals
 
-- Install NextAuth v5 (`next-auth@beta`) and `@auth/prisma-adapter`
-- Set up split auth config pattern for edge compatibility
-- Add GitHub OAuth provider
-- Protect `/dashboard/*` routes using Next.js 16 proxy
-- Redirect unauthenticated users to sign-in
-- Extend Session type with user.id
+(추가될 예정)
 
 ## References
 
-- Edge compatibility: https://authjs.dev/getting-started/installation#edge-compatibility
-- Prisma adapter: https://authjs.dev/getting-started/adapters/prisma
+(추가될 예정)
 
 ## Notes
 
-**Files to Create:**
-1. `src/auth.config.ts` - Edge-compatible config (providers only, no adapter)
-2. `src/auth.ts` - Full config with Prisma adapter and JWT strategy
-3. `src/app/api/auth/[...nextauth]/route.ts` - Export handlers from auth.ts
-4. `src/proxy.ts` - Route protection with redirect logic
-5. `src/types/next-auth.d.ts` - Extend Session type with user.id
-
-**Key Gotchas:**
-- Use `next-auth@beta` (not `@latest` which installs v4)
-- Proxy file must be at `src/proxy.ts` (same level as `app/`)
-- Use named export: `export const proxy = auth(...)` not default export
-- Use `session: { strategy: 'jwt' }` with split config pattern
-- Don't set custom `pages.signIn` - use NextAuth's default page
-- Use Context7 to verify the newest config and conventions
-
-**Environment Variables:**
-```
-AUTH_SECRET=
-AUTH_GITHUB_ID=
-AUTH_GITHUB_SECRET=
-```
-
-**Testing:**
-1. Go to `/dashboard` - should redirect to sign-in
-2. Click "Sign in with GitHub"
-3. Verify redirect back to `/dashboard` after auth
+(추가될 예정)
 
 ## History
 
@@ -66,3 +35,4 @@ AUTH_GITHUB_SECRET=
 - Dashboard Collections DB 연동 완료 (Mock data → Prisma queries, 서버 컴포넌트, 타입별 border color 계산)
 - Pro Badge To Sidebar 완료 (Badge 컴포넌트 추가, Files/Images에 Pro 배지 표시)
 - Code Cleanup Quick Wins 완료 (미사용 코드 제거, 번들 최적화, CSS 성능 개선 - 604줄 정리)
+- Auth Phase 1 완료 (NextAuth v5 + GitHub OAuth, Prisma adapter, /dashboard 보호, 기본 sign-in 페이지)
