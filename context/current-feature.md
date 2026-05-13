@@ -1,51 +1,24 @@
-# Current Feature: Auth Credentials - Email/Password Provider
+# Current Feature
 
 ## Status
 
-In Progress
+(TBD)
 
 ## Overview
 
-Add Credentials provider for email/password authentication with registration.
+(추가될 예정)
 
 ## Goals
 
-- Use bcryptjs for hashing (already installed)
-- Add password field to User model via migration if not already there
-- Update `auth.config.ts` with Credentials provider placeholder
-- Update `auth.ts` to override Credentials with bcrypt validation
-- Create registration API route at `/api/auth/register`
+(추가될 예정)
 
 ## References
 
-- Credentials provider: https://authjs.dev/getting-started/authentication/credentials
+(추가될 예정)
 
 ## Notes
 
-**Registration API Route:**
-`POST /api/auth/register`
-- Accept: name, email, password, confirmPassword
-- Validate passwords match
-- Check if user already exists
-- Hash password with bcryptjs
-- Create user in database
-- Return success/error response
-
-**Credentials Provider in Split Pattern:**
-- `auth.config.ts`: Add Credentials provider with `authorize: () => null` placeholder
-- `auth.ts`: Override the Credentials provider with actual bcrypt validation logic
-
-**Testing:**
-1. Test registration via curl:
-```bash
-curl -X POST http://localhost:3000/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Test","email":"test@test.com","password":"password123","confirmPassword":"password123"}'
-```
-2. Go to `/api/auth/signin`
-3. Sign in with email/password
-4. Verify redirect to `/dashboard`
-5. Verify GitHub OAuth still works
+(추가될 예정)
 
 ## History
 
@@ -63,3 +36,4 @@ curl -X POST http://localhost:3000/api/auth/register \
 - Pro Badge To Sidebar 완료 (Badge 컴포넌트 추가, Files/Images에 Pro 배지 표시)
 - Code Cleanup Quick Wins 완료 (미사용 코드 제거, 번들 최적화, CSS 성능 개선 - 604줄 정리)
 - Auth Phase 1 완료 (NextAuth v5 + GitHub OAuth, Prisma adapter, /dashboard 보호, 기본 sign-in 페이지)
+- Auth Phase 2 완료 (Email/password Credentials provider, /api/auth/register 엔드포인트, bcryptjs 해싱, 로그인 테스트 완료)
