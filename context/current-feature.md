@@ -1,30 +1,16 @@
-# Current Feature: Auth UI - Sign In, Register & Sign Out
+# Current Feature
 
 ## Status
 
-In Progress
+(TBD)
 
 ## Overview
 
-Replace NextAuth default pages with custom UI. Update user icon, email and username in bottom of sidebar.
+(추가될 예정)
 
 ## Goals
 
-- Create custom Sign In page at `/sign-in`
-  - Email and password input fields
-  - "Sign in with GitHub" button
-  - Link to register page
-  - Form validation and error display
-- Create custom Register page at `/register`
-  - Name, email, password, confirm password fields
-  - Form validation (passwords match, email format)
-  - Submit to `/api/auth/register`
-  - Redirect to sign-in on success
-- Update bottom of sidebar with user profile
-  - Display user avatar (GitHub image or initials fallback)
-  - Display user name
-  - Dropdown/menu on avatar click with "Sign out" link
-  - Clicking on the avatar should go to "/profile"
+(추가될 예정)
 
 ## References
 
@@ -32,19 +18,7 @@ Replace NextAuth default pages with custom UI. Update user icon, email and usern
 
 ## Notes
 
-**Avatar Logic:**
-- If user has `image` (from GitHub): use that
-- Otherwise: generate initials from name (e.g., "Brad Traversy" → "BT")
-- Create a reusable avatar component that handles both cases
-
-**Testing:**
-1. Go to `/sign-in` - verify custom page renders
-2. Sign in with GitHub - verify flow works
-3. Sign in with email/password - verify flow works
-4. Verify avatar shows in sidebar (GitHub image or initials)
-5. Click avatar - verify dropdown appears
-6. Click "Sign out" - verify logout and redirect
-7. Go to `/register` - create new account - verify redirect to sign-in
+(추가될 예정)
 
 ## History
 
@@ -63,3 +37,4 @@ Replace NextAuth default pages with custom UI. Update user icon, email and usern
 - Code Cleanup Quick Wins 완료 (미사용 코드 제거, 번들 최적화, CSS 성능 개선 - 604줄 정리)
 - Auth Phase 1 완료 (NextAuth v5 + GitHub OAuth, Prisma adapter, /dashboard 보호, 기본 sign-in 페이지)
 - Auth Phase 2 완료 (Email/password Credentials provider, /api/auth/register 엔드포인트, bcryptjs 해싱, 로그인 테스트 완료)
+- Auth Phase 3 완료 (Custom /sign-in, /register 페이지, Avatar 컴포넌트, Sidebar 사용자 프로필, Sign out 기능, 모든 인증 플로우 테스트 완료)
