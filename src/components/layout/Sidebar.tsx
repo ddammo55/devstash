@@ -2,23 +2,27 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { Session } from 'next-auth';
 import { ChevronDown, ChevronRight, Folder, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { ITEM_TYPE_ICON_MAP } from '@/lib/item-type-icons';
 import { ItemTypeWithCount } from '@/lib/db/items';
 import { CollectionWithStats } from '@/lib/db/collections';
+import { UserProfileDropdown } from '@/components/UserProfileDropdown';
 
 interface SidebarProps {
   itemTypes: ItemTypeWithCount[];
   favoriteCollections: CollectionWithStats[];
   otherCollections: CollectionWithStats[];
+  session?: Session | null;
 }
 
 export default function Sidebar({
   itemTypes,
   favoriteCollections,
   otherCollections,
+  session,
 }: SidebarProps) {
   const [typesOpen, setTypesOpen] = useState(true);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
@@ -201,6 +205,13 @@ export default function Sidebar({
             </Link>
           </div>
         </div>
+
+        {/* User Profile Section */}
+        {session?.user && (
+          <div className="border-t border-border p-2 mt-auto">
+            <UserProfileDropdown session={session} />
+          </div>
+        )}
       </aside>
     </>
   );

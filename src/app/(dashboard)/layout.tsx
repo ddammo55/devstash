@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { auth } from '@/auth';
 import { getCollections } from '@/lib/db/collections';
 import { getSystemItemTypes } from '@/lib/db/items';
 import TopBar from '@/components/layout/TopBar';
@@ -10,19 +11,24 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Get demo user
-  const demoUser = await prisma.user.findUnique({
-    where: { email: 'demo@devstash.io' },
-  });
+  // Get current user session
+  const session = await auth();
 
-  if (!demoUser) {
+  // Get user data
+  const user = session?.user?.email
+    ? await prisma.user.findUnique({
+        where: { email: session.user.email },
+      })
+    : null;
+
+  if (!user) {
     return <div>User not found</div>;
   }
 
   // Fetch sidebar data
   const [itemTypes, collections] = await Promise.all([
     getSystemItemTypes(),
-    getCollections(demoUser.id),
+    getCollections(user.id),
   ]);
 
   const favoriteCollections = collections.filter((c) => c.isFavorite);
@@ -36,6 +42,7 @@ export default async function DashboardLayout({
           itemTypes={itemTypes}
           favoriteCollections={favoriteCollections}
           otherCollections={otherCollections}
+          session={session}
         />
         <main className="flex-1 overflow-auto">{children}</main>
       </div>
